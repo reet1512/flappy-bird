@@ -3,6 +3,23 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+const bg = new Image();
+bg.src = "assets/bg.png";
+
+const birdImg = new Image();
+birdImg.src = "assets/bird.png";
+
+const pipeImg = new Image();
+pipeImg.src = "assets/pipe.png";
+
+const groundImg = new Image();
+groundImg.src = "assets/ground.png";
+
+// SOUNDS
+const flapSound = new Audio("assets/flap.wav");
+const scoreSound = new Audio("assets/score.wav");
+const hitSound = new Audio("assets/hit.wav");
+
 const scoreDisplay = document.getElementById("score");
 const gameOverScreen = document.getElementById("gameOverScreen");
 const finalScore = document.getElementById("finalScore");
@@ -11,6 +28,12 @@ const startScreen = document.getElementById("startScreen");
 const startBtn = document.getElementById("startBtn");
 
 let gameStarted = false;
+
+let bgX = 0;
+let groundX = 0;
+let difficultylevel = 1;
+
+
 startBtn.addEventListener("click", () => {
   startScreen.classList.add("hidden");
   gameStarted = true;
@@ -61,24 +84,28 @@ function createPipe() {
 
 // DRAW BIRD
 function drawBird() {
-  ctx.fillStyle = "yellow";
-  ctx.beginPath();
-  ctx.arc(
+
+  const angle = bird.velocity * 0.05;
+
+  ctx.save();
+
+  ctx.translate(
     bird.x + bird.width / 2,
-    bird.y + bird.height / 2,
-    bird.width / 2,
-    0,
-    Math.PI * 2
+    bird.y + bird.height / 2
   );
-  ctx.fill();
 
-  // Eye
-  ctx.fillStyle = "black";
-  ctx.beginPath();
-  ctx.arc(bird.x + 22, bird.y + 12, 3, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.rotate(angle);
+
+  ctx.drawImage(
+    birdImg,
+    -bird.width / 2,
+    -bird.height / 2,
+    bird.width,
+    bird.height
+  );
+
+  ctx.restore();
 }
-
 // UPDATE BIRD
 function updateBird() {
   bird.velocity += bird.gravity;
@@ -97,21 +124,63 @@ function updateBird() {
 }
 
 // DRAW PIPES
-function drawPipes() {
-  ctx.fillStyle = "green";
+function drawBird() {
 
-  pipes.forEach(pipe => {
-    // Top pipe
-    ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+  const angle = bird.velocity * 0.05;
 
-    // Bottom pipe
-    ctx.fillRect(
-      pipe.x,
-      pipe.bottomY,
-      pipeWidth,
-      canvas.height - pipe.bottomY
-    );
-  });
+  ctx.save();
+
+  ctx.translate(
+    bird.x + bird.width / 2,
+    bird.y + bird.height / 2
+  );
+
+  ctx.rotate(angle);
+
+  ctx.drawImage(
+    birdImg,
+    -bird.width / 2,
+    -bird.height / 2,
+    bird.width,
+    bird.height
+  );
+
+  ctx.restore();
+}
+
+function drawBackground() {
+  bgX -= 0.5;
+
+  if (bgX <= -canvas.width) {
+    bgX = 0;
+  }
+
+  ctx.drawImage(bg, bgX, 0, canvas.width, canvas.height);
+  ctx.drawImage(bg, bgX + canvas.width, 0, canvas.width, canvas.height);
+}
+
+function drawGround() {
+  groundX -= pipeSpeed;
+
+  if (groundX <= -canvas.width) {
+    groundX = 0;
+  }
+
+  ctx.drawImage(
+    groundImg,
+    groundX,
+    canvas.height - 100,
+    canvas.width,
+    100
+  );
+
+  ctx.drawImage(
+    groundImg,
+    groundX + canvas.width,
+    canvas.height - 100,
+    canvas.width,
+    100
+  );
 }
 
 // UPDATE PIPES
@@ -120,11 +189,22 @@ function updatePipes() {
     pipe.x -= pipeSpeed;
 
     // Score increase
-    if (!pipe.counted && pipe.x + pipeWidth < bird.x) {
-      score++;
-      pipe.counted = true;
-      scoreDisplay.textContent = score;
-    }
+   if (!pipe.counted && pipe.x + pipeWidth < bird.x) {
+
+  score += 1;
+
+  scoreSound.currentTime = 0;
+  scoreSound.play();
+
+  pipe.counted = true;
+
+  scoreDisplay.textContent = score;
+
+  // DIFFICULTY SCALING
+  if (score % 5 === 0) {
+    bird.gravity += 0.02;
+  }
+}
 
     // Collision detection
     if (
@@ -173,21 +253,14 @@ function restartGame() {
 
 // CONTROLS
 function flap() {
+
   if (!gameRunning) return;
+
   bird.velocity = bird.jump;
+
+  flapSound.currentTime = 0;
+  flapSound.play();
 }
-
-document.addEventListener("keydown", e => {
-  if (e.code === "Space") {
-    flap();
-  }
-});
-
-document.addEventListener("click", flap);
-document.addEventListener("touchstart", flap);
-
-restartBtn.addEventListener("click", restartGame);
-
 // GAME LOOP
 function gameLoop() {
   
@@ -198,12 +271,19 @@ function gameLoop() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  updateBird();
-  drawBird();
+// BACKGROUND
+drawBackground();
 
-  // Create pipes every 100 frames
-  if (frame % 100 === 0) {
-    createPipe();
+// PIPES
+updatePipes();
+drawPipes();
+
+// BIRD
+updateBird();
+drawBird();
+
+// GROUND
+drawGround();
   }
 
   updatePipes();
@@ -212,7 +292,7 @@ function gameLoop() {
   frame++;
 
   requestAnimationFrame(gameLoop);
-}
+
 
 // START GAME
 gameLoop();
