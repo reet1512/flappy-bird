@@ -40,7 +40,7 @@ const bird = {
 const pipes = [];
 const pipeWidth = 60;
 const pipeGap = 160;
-const pipeSpeed = 2;
+const pipeSpeed = 7;
 
 // GAME VARIABLES
 let score = 0;

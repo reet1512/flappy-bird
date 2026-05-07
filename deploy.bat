@@ -1,4 +1,4 @@
-g@echo off
+@echo off
 
 echo Adding files...
 git add .
