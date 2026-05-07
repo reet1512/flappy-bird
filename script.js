@@ -2,24 +2,40 @@
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-
 const bg = new Image();
-bg.src = "assets/bg.png";
-
 const birdImg = new Image();
-birdImg.src = "assets/bird.png";
-
 const pipeImg = new Image();
-pipeImg.src = "assets/pipe.png";
-
 const groundImg = new Image();
+
+bg.src = "assets/bg.png";
+birdImg.src = "assets/bird.png";
+pipeImg.src = "assets/pipe.png";
 groundImg.src = "assets/ground.png";
 
-// IMAGE ONLOAD HANDLERS
-bg.onload = () => console.log("BG loaded");
-birdImg.onload = () => console.log("Bird loaded");
-pipeImg.onload = () => console.log("Pipe loaded");
-groundImg.onload = () => console.log("Ground loaded");
+// PROFESSIONAL IMAGE PRELOADER
+const images = [bg, birdImg, pipeImg, groundImg];
+
+let imagesLoaded = 0;
+
+images.forEach(img => {
+
+  img.onload = () => {
+    console.log(`${img.src} loaded`);
+
+    imagesLoaded++;
+
+    if (imagesLoaded === images.length) {
+      console.log("All assets loaded");
+
+      startGame();
+    }
+  };
+
+  img.onerror = () => {
+    console.error(`Failed to load: ${img.src}`);
+  };
+
+});
 
 // SOUNDS
 const flapSound = new Audio("assets/flap.wav");
@@ -47,12 +63,13 @@ startBtn.addEventListener("click", () => {
 
 // RESPONSIVE CANVAS
 function resizeCanvas() {
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 }
 
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
+pipes.length = 0;
 
 // BIRD
 const bird = {
@@ -118,7 +135,7 @@ function updateBird() {
   bird.y += bird.velocity;
 
   // Floor collision
-  if (bird.y + bird.height >= canvas.height) {
+  if (bird.y + bird.height >= canvas.height-100) {
     gameOver();
   }
 
@@ -301,4 +318,7 @@ drawGround();
 
 
 // START GAME
-gameLoop();
+function startGame() {
+  console.log("All assets loaded");
+  gameLoop();
+}
