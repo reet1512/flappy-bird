@@ -7,10 +7,10 @@ const birdImg = new Image();
 const pipeImg = new Image();
 const groundImg = new Image();
 
-bg.src = "assets/bg.png";
-birdImg.src = "assets/bird.png";
-pipeImg.src = "assets/pipe.png";
-groundImg.src = "assets/ground.png";
+bg.src = "assets/flappy-bird-assets-master/sprites/bg.png";
+birdImg.src = "assets/flappy-bird-assets-master/sprites/bird.png";
+pipeImg.src = "assets/flappy-bird-assets-master/sprites/pipe.png";
+groundImg.src = "assets/flappy-bird-assets-master/sprites/ground.png";
 
 // PROFESSIONAL IMAGE PRELOADER
 const images = [bg, birdImg, pipeImg, groundImg];
@@ -38,9 +38,9 @@ images.forEach(img => {
 });
 
 // SOUNDS
-const flapSound = new Audio("assets/flap.wav");
-const scoreSound = new Audio("assets/score.wav");
-const hitSound = new Audio("assets/hit.wav");
+const flapSound = new Audio("assets/flappy-bird-assets-master/audio/wing.wav");
+const scoreSound = new Audio("assets/flappy-bird-assets-master/audio/point.wav");
+const hitSound = new Audio("assets/flappy-bird-assets-master/audio/hit.wav");
 
 const scoreDisplay = document.getElementById("score");
 const gameOverScreen = document.getElementById("gameOverScreen");
@@ -148,30 +148,6 @@ function updateBird() {
 }
 
 // DRAW PIPES
-function drawBird() {
-
-  const angle = bird.velocity * 0.05;
-
-  ctx.save();
-
-  ctx.translate(
-    bird.x + bird.width / 2,
-    bird.y + bird.height / 2
-  );
-
-  ctx.rotate(angle);
-
-  ctx.drawImage(
-    birdImg,
-    -bird.width / 2,
-    -bird.height / 2,
-    bird.width,
-    bird.height
-  );
-
-  ctx.restore();
-}
-
 function drawBackground() {
   bgX -= 0.5;
 
@@ -249,6 +225,30 @@ function updatePipes() {
   }
 }
 
+function drawPipes() {
+  pipes.forEach(pipe => {
+
+    // TOP PIPE
+    ctx.drawImage(
+      pipeImg,
+      pipe.x,
+      0,
+      pipeWidth,
+      pipe.topHeight
+    );
+
+    // BOTTOM PIPE
+    ctx.drawImage(
+      pipeImg,
+      pipe.x,
+      pipe.bottomY,
+      pipeWidth,
+      canvas.height - pipe.bottomY
+    );
+
+  });
+}
+
 // GAME OVER
 function gameOver() {
   gameRunning = false;
@@ -287,36 +287,43 @@ function flap() {
 }
 // GAME LOOP
 function gameLoop() {
-  
   if (!gameRunning || !gameStarted) {
-  requestAnimationFrame(gameLoop);
-  return;
-}
+    requestAnimationFrame(gameLoop);
+    return;
+  }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-// BACKGROUND
-drawBackground();
+  // BACKGROUND
+  drawBackground();
 
-// PIPES
-updatePipes();
-drawPipes();
-
-// BIRD
-updateBird();
-drawBird();
-
-// GROUND
-drawGround();
-  }
-
+  // PIPES
   updatePipes();
   drawPipes();
+
+  // BIRD
+  updateBird();
+  drawBird();
+
+  // GROUND
+  drawGround();
 
   frame++;
 
   requestAnimationFrame(gameLoop);
+}
 
+// EVENT LISTENERS
+document.addEventListener("keydown", e => {
+  if (e.code === "Space") {
+    flap();
+  }
+});
+
+document.addEventListener("click", flap);
+document.addEventListener("touchstart", flap);
+
+restartBtn.addEventListener("click", restartGame);
 
 // START GAME
 function startGame() {
