@@ -15,6 +15,12 @@ pipeImg.src = "assets/pipe.png";
 const groundImg = new Image();
 groundImg.src = "assets/ground.png";
 
+// IMAGE ONLOAD HANDLERS
+bg.onload = () => console.log("BG loaded");
+birdImg.onload = () => console.log("Bird loaded");
+pipeImg.onload = () => console.log("Pipe loaded");
+groundImg.onload = () => console.log("Ground loaded");
+
 // SOUNDS
 const flapSound = new Audio("assets/flap.wav");
 const scoreSound = new Audio("assets/score.wav");
