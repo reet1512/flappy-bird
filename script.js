@@ -69,7 +69,8 @@ function resizeCanvas() {
 
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
-pipes.length = 0;
+const pipes = [];
+
 
 // BIRD
 const bird = {
@@ -83,7 +84,7 @@ const bird = {
 };
 
 // PIPES
-const pipes = [];
+
 const pipeWidth = 60;
 const pipeGap = 160;
 const pipeSpeed = 7;
