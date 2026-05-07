@@ -229,22 +229,34 @@ function drawPipes() {
   pipes.forEach(pipe => {
 
     // TOP PIPE
-    ctx.drawImage(
-      pipeImg,
-      pipe.x,
-      0,
-      pipeWidth,
-      pipe.topHeight
-    );
+    if (pipeImg.complete && pipeImg.naturalHeight !== 0) {
+      ctx.drawImage(
+        pipeImg,
+        pipe.x,
+        0,
+        pipeWidth,
+        pipe.topHeight
+      );
+    } else {
+      // Fallback: draw green rectangle
+      ctx.fillStyle = "#2ecc71";
+      ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+    }
 
     // BOTTOM PIPE
-    ctx.drawImage(
-      pipeImg,
-      pipe.x,
-      pipe.bottomY,
-      pipeWidth,
-      canvas.height - pipe.bottomY
-    );
+    if (pipeImg.complete && pipeImg.naturalHeight !== 0) {
+      ctx.drawImage(
+        pipeImg,
+        pipe.x,
+        pipe.bottomY,
+        pipeWidth,
+        canvas.height - pipe.bottomY
+      );
+    } else {
+      // Fallback: draw green rectangle
+      ctx.fillStyle = "#2ecc71";
+      ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
+    }
 
   });
 }
@@ -297,7 +309,10 @@ function gameLoop() {
   // BACKGROUND
   drawBackground();
 
-  // PIPES
+  // PIPES (Create pipes every 100 frames)
+  if (frame % 100 === 0) {
+    createPipe();
+  }
   updatePipes();
   drawPipes();
 
