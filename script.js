@@ -48,6 +48,84 @@ const finalScore = document.getElementById("finalScore");
 const restartBtn = document.getElementById("restartBtn");
 const startScreen = document.getElementById("startScreen");
 const startBtn = document.getElementById("startBtn");
+const playerName = document.getElementById("playerName");
+const playerNameGameOver = document.getElementById("playerNameGameOver");
+const userDisplay = document.getElementById("userDisplay");
+const highScoreDisplay = document.getElementById("highScore");
+const highScoreGameOverDisplay = document.getElementById("highScoreValue");
+const pastScoresDisplay = document.getElementById("pastScoresList");
+
+// USERNAME SYSTEM
+let username = localStorage.getItem("username");
+
+if (!username) {
+  username = prompt("Enter your name:");
+  if (username) {
+    localStorage.setItem("username", username);
+  } else {
+    username = "Player";
+    localStorage.setItem("username", username);
+  }
+}
+
+// SCORE SYSTEM
+function getHighScore() {
+  return parseInt(localStorage.getItem("highScore")) || 0;
+}
+
+function getPastScores() {
+  const scores = localStorage.getItem("pastScores");
+  return scores ? JSON.parse(scores) : [];
+}
+
+function saveScore(newScore) {
+  const currentHighScore = getHighScore();
+  const pastScores = getPastScores();
+
+  // Update high score if needed
+  if (newScore > currentHighScore) {
+    localStorage.setItem("highScore", newScore);
+  }
+
+  // Add to past scores (keep last 10)
+  pastScores.unshift(newScore);
+  if (pastScores.length > 10) {
+    pastScores.pop();
+  }
+  localStorage.setItem("pastScores", JSON.stringify(pastScores));
+}
+
+function displayHighScore() {
+  const highScore = getHighScore();
+  highScoreDisplay.textContent = highScore;
+  highScoreGameOverDisplay.textContent = highScore;
+}
+
+function displayPastScores() {
+  const pastScores = getPastScores();
+  pastScoresDisplay.innerHTML = "";
+  
+  if (pastScores.length === 0) {
+    pastScoresDisplay.innerHTML = "<li>No past scores yet</li>";
+    return;
+  }
+
+  pastScores.forEach((score, index) => {
+    const li = document.createElement("li");
+    li.textContent = `${index + 1}. Score: ${score}`;
+    pastScoresDisplay.appendChild(li);
+  });
+}
+
+// Display username on start screen
+playerName.textContent = `Welcome, ${username}!`;
+playerNameGameOver.textContent = `Player: ${username}`;
+userDisplay.textContent = `${username}`;
+userDisplay.style.display = "none"; // Hide until game starts
+
+// Display high score on start screen
+displayHighScore();
+displayPastScores();
 
 let gameStarted = false;
 
@@ -58,6 +136,7 @@ let difficultylevel = 1;
 
 startBtn.addEventListener("click", () => {
   startScreen.classList.add("hidden");
+  userDisplay.style.display = "block";
   gameStarted = true;
 });
 
@@ -265,6 +344,14 @@ function drawPipes() {
 function gameOver() {
   gameRunning = false;
   finalScore.textContent = `Score: ${score}`;
+  playerNameGameOver.textContent = `Player: ${username}`;
+  userDisplay.style.display = "none"; // Hide username during game over
+  
+  // Save score and display scores
+  saveScore(score);
+  displayHighScore();
+  displayPastScores();
+  
   gameOverScreen.classList.remove("hidden");
 }
 
@@ -283,7 +370,7 @@ function restartGame() {
   gameRunning = true;
 
   gameOverScreen.classList.add("hidden");
-
+  userDisplay.style.display = "block";
   
 }
 

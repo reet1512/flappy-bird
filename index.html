@@ -12,16 +12,29 @@
   <div class="game-container">
     <div id="startScreen">
       <h1>Flappy Bird</h1>
+      <p id="playerName" class="player-name"></p>
+      <div id="highScoreDisplay" class="score-display">
+        <p>High Score: <span id="highScore">0</span></p>
+      </div>
       <button id="startBtn">Start Game</button>
     </div>
 
     <canvas id="gameCanvas"></canvas>
 
+    <div id="userDisplay" class="user-display"></div>
     <div id="score">0</div>
 
     <div id="gameOverScreen" class="hidden">
       <h1>Game Over</h1>
+      <p id="playerNameGameOver" class="player-name"></p>
       <p id="finalScore">Score: 0</p>
+      <div id="highScoreGameOver" class="score-display">
+        <p>High Score: <span id="highScoreValue">0</span></p>
+      </div>
+      <div id="pastScoresDisplay" class="past-scores">
+        <h3>Past Scores</h3>
+        <ul id="pastScoresList"></ul>
+      </div>
       <button id="restartBtn">Restart</button>
     </div>
 

@@ -85,3 +85,81 @@ canvas {
 .hidden {
   display: none !important;
 }
+
+.player-name {
+  font-size: 28px;
+  color: #ffd700;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 5px black;
+}
+
+#userDisplay {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+
+  text-shadow: 2px 2px 5px black;
+}
+
+.score-display {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 2px solid #ffd700;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.score-display p {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 2px 2px 5px black;
+}
+
+.score-display span {
+  color: #ffd700;
+  font-size: 28px;
+}
+
+.past-scores {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: 2px solid #ffd700;
+  margin: 20px 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.past-scores h3 {
+  color: #ffd700;
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 5px black;
+}
+
+.past-scores ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.past-scores li {
+  color: white;
+  font-size: 16px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+  text-shadow: 1px 1px 3px black;
+}
+
+.past-scores li:last-child {
+  border-bottom: none;
+}
