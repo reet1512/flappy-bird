@@ -151,7 +151,8 @@ speedButtons.forEach(btn => {
 // RESTART SPEED SELECTION
 const restartSpeedButtons = document.querySelectorAll(".speed-btn-restart");
 restartSpeedButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation(); // Prevent event bubbling
     // Remove active class from all buttons
     restartSpeedButtons.forEach(b => b.classList.remove("active"));
     // Add active class to clicked button
@@ -395,6 +396,7 @@ function gameOver() {
 
 // RESTART GAME
 function restartGame() {
+  console.log("Restart clicked! Starting new game...");
   bird.y = 200;
   bird.velocity = 0;
 
@@ -403,15 +405,14 @@ function restartGame() {
   score = 0;
   frame = 0;
   
-  // selectedBirdGravity is already set by the restart button click handlers
-  // No need to reset it - use the newly selected speed from restart buttons
-
   scoreDisplay.textContent = score;
 
   gameRunning = true;
+  gameStarted = true;
 
   gameOverScreen.classList.add("hidden");
   userDisplay.style.display = "block";
+  console.log("Game restarted with gravity:", selectedBirdGravity);
   
 }
 
