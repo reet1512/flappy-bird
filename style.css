@@ -19,6 +19,100 @@ canvas {
   height: 100vh;
 }
 
+.game-container {
+  display: none;
+}
+
+.game-container.authenticated {
+  display: block;
+}
+
+#app {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  max-width: 450px;
+  width: 90%;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  border: 2px solid #2ecc71;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-container.authenticated ~ #app {
+  bottom: 20px;
+  right: 20px;
+  top: auto;
+  left: auto;
+  transform: none;
+  max-width: 400px;
+  max-height: 600px;
+  padding: 15px;
+  display: block;
+}
+
+#app > div {
+  width: 100%;
+}
+
+#app .cl-root {
+  --colorPrimary: #2ecc71;
+  --colorText: #000;
+  --colorBackground: white;
+}
+
+/* Clerk sign-in styling */
+#app .cl-signIn {
+  background: white;
+}
+
+#app .cl-card {
+  background: white;
+  box-shadow: none;
+}
+
+#app .cl-form {
+  padding: 0;
+  background: white;
+}
+
+#app .cl-form input,
+#app .cl-form button {
+  background: white !important;
+  color: #000 !important;
+  border: 1px solid #ddd !important;
+}
+
+#app .cl-form input::placeholder {
+  color: #999 !important;
+}
+
+#app button {
+  font-size: 14px !important;
+  background: #2ecc71 !important;
+  color: white !important;
+}
+
+#app .cl-text,
+#app .cl-label {
+  color: #000 !important;
+}
+
+#sign-in {
+  color: #000;
+}
+
+#user-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
 #score {
   position: absolute;
   top: 20px;
