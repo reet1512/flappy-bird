@@ -132,6 +132,21 @@ let gameStarted = false;
 let bgX = 0;
 let groundX = 0;
 let difficultylevel = 1;
+let selectedBirdGravity = 0.5; // Default gravity
+
+// BIRD SPEED SELECTION
+const speedButtons = document.querySelectorAll(".speed-btn");
+speedButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    // Remove active class from all buttons
+    speedButtons.forEach(b => b.classList.remove("active"));
+    // Add active class to clicked button
+    btn.classList.add("active");
+    // Set the selected gravity
+    selectedBirdGravity = parseFloat(btn.dataset.speed);
+    console.log(`Bird speed selected: ${btn.dataset.label} (gravity: ${selectedBirdGravity})`);
+  });
+});
 
 
 startBtn.addEventListener("click", () => {
@@ -211,7 +226,7 @@ function drawBird() {
 }
 // UPDATE BIRD
 function updateBird() {
-  bird.velocity += bird.gravity;
+  bird.velocity += selectedBirdGravity;
   bird.y += bird.velocity;
 
   // Floor collision
@@ -281,7 +296,7 @@ function updatePipes() {
 
   // DIFFICULTY SCALING
   if (score % 5 === 0) {
-    bird.gravity += 0.02;
+    selectedBirdGravity += 0.02;
   }
 }
 
@@ -364,6 +379,12 @@ function restartGame() {
 
   score = 0;
   frame = 0;
+  
+  // Reset selectedBirdGravity to the currently selected button value
+  const activeBtn = document.querySelector(".speed-btn.active");
+  if (activeBtn) {
+    selectedBirdGravity = parseFloat(activeBtn.dataset.speed);
+  }
 
   scoreDisplay.textContent = score;
 

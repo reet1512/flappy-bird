@@ -128,6 +128,47 @@ canvas {
   font-size: 28px;
 }
 
+.difficulty-selector {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #2ecc71;
+  margin: 20px 0;
+}
+
+.difficulty-selector p {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 5px black;
+}
+
+.speed-btn {
+  padding: 10px 20px;
+  margin: 8px;
+  font-size: 16px;
+  background: rgba(46, 204, 113, 0.5);
+  color: white;
+  border: 2px solid #2ecc71;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.speed-btn:hover {
+  background: #2ecc71;
+  transform: scale(1.08);
+  box-shadow: 0 0 15px rgba(46, 204, 113, 0.8);
+}
+
+.speed-btn.active {
+  background: #2ecc71;
+  box-shadow: 0 0 20px rgba(46, 204, 113, 1);
+  border-color: #27ae60;
+}
+
 .past-scores {
   background: rgba(255, 255, 255, 0.1);
   padding: 15px 20px;
