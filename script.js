@@ -148,6 +148,20 @@ speedButtons.forEach(btn => {
   });
 });
 
+// RESTART SPEED SELECTION
+const restartSpeedButtons = document.querySelectorAll(".speed-btn-restart");
+restartSpeedButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    // Remove active class from all buttons
+    restartSpeedButtons.forEach(b => b.classList.remove("active"));
+    // Add active class to clicked button
+    btn.classList.add("active");
+    // Set the selected gravity
+    selectedBirdGravity = parseFloat(btn.dataset.speed);
+    console.log(`Bird speed selected for restart: ${btn.dataset.label} (gravity: ${selectedBirdGravity})`);
+  });
+});
+
 
 startBtn.addEventListener("click", () => {
   startScreen.classList.add("hidden");
@@ -367,6 +381,15 @@ function gameOver() {
   displayHighScore();
   displayPastScores();
   
+  // Sync restart buttons to current selection
+  const restartBtns = document.querySelectorAll(".speed-btn-restart");
+  restartBtns.forEach(btn => {
+    btn.classList.remove("active");
+    if (parseFloat(btn.dataset.speed) === selectedBirdGravity) {
+      btn.classList.add("active");
+    }
+  });
+  
   gameOverScreen.classList.remove("hidden");
 }
 
@@ -380,11 +403,8 @@ function restartGame() {
   score = 0;
   frame = 0;
   
-  // Reset selectedBirdGravity to the currently selected button value
-  const activeBtn = document.querySelector(".speed-btn.active");
-  if (activeBtn) {
-    selectedBirdGravity = parseFloat(activeBtn.dataset.speed);
-  }
+  // selectedBirdGravity is already set by the restart button click handlers
+  // No need to reset it - use the newly selected speed from restart buttons
 
   scoreDisplay.textContent = score;
 
